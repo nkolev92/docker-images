@@ -1,5 +1,38 @@
-FROM microsoft/dotnet-nightly:2.1-sdk AS build
+FROM buildpack-deps:jessie-scm as build
+
+# Install .NET CLI dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libc6 \
+        libcurl3 \
+        libgcc1 \
+        libgssapi-krb5-2 \
+        libicu52 \
+        liblttng-ust0 \
+        libssl1.0.0 \
+        libstdc++6 \
+        libunwind8 \
+        libuuid1 \
+        zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install dotnet.exe
 WORKDIR /app
+ADD . /app
+RUN mkdir -p /usr/share/dotnet \
+    && tar -xzf dotnet-sdk-2.1.401-linux-x64.tar.gz -C /usr/share/dotnet \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+
+# Trigger the population of the local package cache
+ENV NUGET_XMLDOC_MODE skip
+RUN mkdir warmup \
+    && cd warmup \
+    && dotnet new \
+    && cd .. \
+    && rm -rf warmup \
+    && rm -rf /tmp/NuGetScratch
+
+ENV NUGET_PLUGIN_PATHS CredentialProvider.Microsoft/CredentialProvider.Microsoft.dll
 
 # restore
 COPY dotnetapp/*.csproj ./dotnetapp/
