@@ -19,9 +19,15 @@ RUN apt-get update \
 # Install dotnet.exe
 WORKDIR /app
 ADD . /app
-RUN mkdir -p /usr/share/dotnet \
-    && tar -xzf dotnet-sdk-2.1.401-linux-x64.tar.gz -C /usr/share/dotnet \
+
+ENV DOTNET_SDK_VERSION 2.1.400
+
+RUN curl -SL --output dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-x64.tar.gz \
+    && mkdir -p /usr/share/dotnet \
+    && tar -xzf dotnet.tar.gz -C /usr/share/dotnet \
     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+
+ENV NUGET_PLUGIN_PATHS CredentialProvider.Microsoft/CredentialProvider.Microsoft.dll
 
 # Trigger the population of the local package cache
 ENV NUGET_XMLDOC_MODE skip
@@ -32,7 +38,6 @@ RUN mkdir warmup \
     && rm -rf warmup \
     && rm -rf /tmp/NuGetScratch
 
-ENV NUGET_PLUGIN_PATHS CredentialProvider.Microsoft/CredentialProvider.Microsoft.dll
 
 # restore
 COPY dotnetapp/*.csproj ./dotnetapp/
