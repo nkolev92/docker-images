@@ -27,7 +27,7 @@ RUN curl -SL --output dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotn
     && tar -xzf dotnet.tar.gz -C /usr/share/dotnet \
     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
 
-ENV NUGET_PLUGIN_PATHS CredentialProvider.Microsoft/CredentialProvider.Microsoft.dll
+ENV NUGET_PLUGIN_PATHS /app/CredentialProvider.Microsoft/CredentialProvider.Microsoft.dll
 
 # Trigger the population of the local package cache
 ENV NUGET_XMLDOC_MODE skip
@@ -44,14 +44,15 @@ COPY dotnetapp/*.csproj ./dotnetapp/
 WORKDIR /app/dotnetapp
 RUN dotnet restore
 
-# build and publish
-WORKDIR /app/
-COPY dotnetapp/. ./dotnetapp/
-WORKDIR /app/dotnetapp
-RUN dotnet publish -c Release -o out
+# This is commented out as the main scenario here is to test restore only.
+# # build and publish
+# WORKDIR /app/
+# COPY dotnetapp/. ./dotnetapp/
+# WORKDIR /app/dotnetapp
+# RUN dotnet publish -c Release -o out
 
-# entrypoint
-FROM microsoft/dotnet-nightly:2.1-runtime AS runtime
-WORKDIR /app
-COPY --from=build /app/dotnetapp/out ./
-ENTRYPOINT ["dotnet", "dotnetapp.dll"]
+# # entrypoint
+# FROM microsoft/dotnet-nightly:2.1-runtime AS runtime
+# WORKDIR /app
+# COPY --from=build /app/dotnetapp/out ./
+# ENTRYPOINT ["dotnet", "dotnetapp.dll"]
