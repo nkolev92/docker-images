@@ -6,11 +6,15 @@ using static System.Console;
 
 public static class Program
 {
-    public static void Main(string[] args) 
+    public static void Main(string[] args)
     {
-          WriteLine("**Environment**");
-          WriteLine($"Platform: .NET Core");
-          WriteLine($"OS: {RuntimeInformation.OSDescription}");
-          WriteLine();
+
+        var text = "Random text.";
+        File.WriteAllText(@"WriteText.txt", text);
+
+        WriteLine("**Environment**");
+        WriteLine($"Platform: .NET Core");
+        WriteLine($"OS: {RuntimeInformation.OSDescription}");
+        WriteLine();
     }
 }
