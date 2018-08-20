@@ -10,7 +10,8 @@ public static class Program
     {
 
         var text = "Random text.";
-        File.WriteAllText(@"/app/WriteText.txt", text);
+        Directory.CreateDirectory("/var/logs");
+        File.WriteAllText(@"/var/logs/WriteText.txt", text);
 
         WriteLine("**Environment**");
         WriteLine($"Platform: .NET Core");

@@ -57,6 +57,8 @@ COPY dotnetapp/. ./dotnetapp/
 WORKDIR /app/dotnetapp
 RUN dotnet publish -c Release -o out
 
+RUN mkdir -p /var/logs
+
 # entrypoint
 FROM microsoft/dotnet-nightly:2.1-runtime AS runtime
 WORKDIR /app
