@@ -3,11 +3,5 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RestoreSources>https://mseng.pkgs.visualstudio.com/_packaging/VS-PrivateAssemblies/nuget/v3/index.json</RestoreSources>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Internal.Performance.CodeMarkers.DesignTime" Version="15.*"/>
-  </ItemGroup>
-
 </Project>

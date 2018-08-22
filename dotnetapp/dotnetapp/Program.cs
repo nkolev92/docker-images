@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Text;
+using System.Globalization;
 using static System.Console;
 
 public static class Program
@@ -11,6 +12,8 @@ public static class Program
           WriteLine("**Environment**");
           WriteLine($"Platform: .NET Core");
           WriteLine($"OS: {RuntimeInformation.OSDescription}");
+          WriteLine($"CurrentCulture: `{CultureInfo.CurrentCulture}`");
+          WriteLine($"CurrentCulture.Name: `{CultureInfo.CurrentCulture.Name}`");
           WriteLine();
     }
 }

@@ -44,21 +44,19 @@ RUN mkdir warmup \
     && rm -rf warmup \
     && rm -rf /tmp/NuGetScratch
 
-
 # restore
 COPY dotnetapp/*.csproj ./dotnetapp/
 WORKDIR /app/dotnetapp
-RUN dotnet restore /v:d /p:NuGetInteractive="true"
+RUN dotnet restore /v:d
 
-# This is commented out as the main scenario here is to test restore only.
-# # build and publish
-# WORKDIR /app/
-# COPY dotnetapp/. ./dotnetapp/
-# WORKDIR /app/dotnetapp
-# RUN dotnet publish -c Release -o out
+# build and publish
+WORKDIR /app/
+COPY dotnetapp/. ./dotnetapp/
+WORKDIR /app/dotnetapp
+RUN dotnet publish -c Release -o out
 
-# # entrypoint
-# FROM microsoft/dotnet-nightly:2.1-runtime AS runtime
-# WORKDIR /app
-# COPY --from=build /app/dotnetapp/out ./
-# ENTRYPOINT ["dotnet", "dotnetapp.dll"]
+# entrypoint
+FROM microsoft/dotnet-nightly:2.1-runtime AS runtime
+WORKDIR /app
+COPY --from=build /app/dotnetapp/out ./
+ENTRYPOINT ["dotnet", "dotnetapp.dll"]
