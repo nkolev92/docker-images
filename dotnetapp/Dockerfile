@@ -29,12 +29,11 @@ RUN curl -SL --output dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotn
 
 # Install the plugin
 RUN mkdir -p /app/CP
-RUN ls -la .
 RUN tar -xzf /app/Microsoft.NuGet.CredentialProvider.tar.gz -C /app/CP
 
 ENV NUGET_PLUGIN_PATHS /app/CP/plugins/netcore/CredentialProvider.Microsoft/CredentialProvider.Microsoft.dll
 
-RUN ls -la /app
+COPY /nuget-patch/ /usr/share/dotnet/sdk/$DOTNET_SDK_VERSION
 
 # Trigger the population of the local package cache
 ENV NUGET_XMLDOC_MODE skip
@@ -49,7 +48,7 @@ RUN mkdir warmup \
 # restore
 COPY dotnetapp/*.csproj ./dotnetapp/
 WORKDIR /app/dotnetapp
-RUN dotnet restore /v:d
+RUN dotnet restore /v:d /p:NuGetInteractive="true"
 
 # This is commented out as the main scenario here is to test restore only.
 # # build and publish
