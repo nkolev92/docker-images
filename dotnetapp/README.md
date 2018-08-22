@@ -10,5 +10,5 @@ This sample requires [Docker 17.06](https://docs.docker.com/release-notes/docker
 
 ```console
 docker build -f .\Dockerfile --pull -t dotnetapp .
-docker run --rm dotnetapp Hello .NET Core from Docker
+docker run --rm dotnetapp
 ```
